@@ -8,20 +8,28 @@ import (
 
 var days map[time.Month]int
 
+func ask(d time.Time) int {
+	var i int
+	fmt.Scan(&i)
+
+	for i > 6 {
+		fmt.Printf("Reduced? ")
+		fmt.Scan(&i)
+	}
+
+	if time.Weekday(i) != d.Weekday() {
+		fmt.Printf("✗ not %s ", time.Weekday(i))
+		return ask(d)
+	}
+
+	return i
+}
+
 func test() {
 	month := time.Month(rand.Intn(12))
 	date := time.Date(rand.Intn(347)+1753, month, rand.Intn(days[month]+1), 0, 0, 0, 0, time.UTC)
 	fmt.Printf("%s: ", date.Format("January 2, 2006"))
-
-	var i int
-	fmt.Scan(&i)
-	day := time.Weekday(i)
-
-	if day == date.Weekday() {
-		fmt.Printf("✓ %s\n", time.Weekday(i))
-	} else {
-		fmt.Printf("✗ %s (not %s)\n", date.Weekday(), time.Weekday(i))
-	}
+	fmt.Printf("✓ %s\n", time.Weekday(ask(date)))
 }
 
 func init() {
